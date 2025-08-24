@@ -1,0 +1,19 @@
+.welcome {
+  margin-left: 15px;
+  font-weight: 600;
+  color: #e23744;
+}
+
+.logout-btn {
+  margin-left: 15px;
+  background: #e23744;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+}
+
+.logout-btn:hover {
+  background: #c21f34;
+}

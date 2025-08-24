@@ -1,19 +1,29 @@
 import { Order } from "../models/order.model.js";
 import { User } from "../models/user.model.js";
+import { ApiError } from "../utils/ApiError.js";
+import jwt from "jsonwebtoken";
 export const createOrder = async (req, res) => {
   try {
-    const { userId, foodItem } = req.body;
+    const { foodItem } = req.body;
+    const token = req.cookies.accessToken;
+    if (!token) {
+      throw new ApiError(401, "No token");
+    }
 
-    // find user to check type
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET);
+    const userId = decoded._id;
+
+    // ✅ fix here
     const user = await User.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
-
-    const priority = user.type === "staff" ? 1 : 2;
+    console.log(user.userType);
+    
+    const priority = user.userType === "staff" ? 1 : 2;
 
     const order = new Order({
-      userId,
       foodItem,
-      priority
+      priority,
+      userId   // ✅ add this so populate works later
     });
 
     await order.save();
